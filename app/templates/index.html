@@ -1,0 +1,15 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - Calisthenics Progression</title>
+        {% else %}
+        <title>Welcome to Calisthenics Progression!</title>
+        {% endif %}
+    </head>
+    <body>
+        <h1>Hi {{ user.username }}</h1>
+        {% for workouts in workouts %}
+        <div><p>{{ workouts.athlet.username }} completed: <b>{{ workouts.title}}</b></p></div>
+        {% endfor %}
+    </body>
+</html>
