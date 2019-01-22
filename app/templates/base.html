@@ -1,0 +1,17 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - Calisthenics Progression</title>
+        {% else %}
+        <title>Welcome to Calisthenics Progression!</title>
+        {% endif %}
+    </head>
+    <body>
+        <div>Calisthenics Progression: 
+            <a href="\index">Home</a></div>
+            <a href="\login">Login</a>
+        <hr>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
