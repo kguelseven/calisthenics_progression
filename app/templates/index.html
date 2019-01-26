@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Hi {{ current_user.username }}</h1>
-    {% for workouts in workouts %}
-    <div><p>{{ workouts.athlet.username }} completed: <b>{{ workouts.title}}</b></p></div>
+    {% for workout in workouts %}
+    <div><p>{{ workout.athlet.username }} completed: <b>{{ workout.title}}</b></p></div>
     {% endfor %}
 {% endblock %}
