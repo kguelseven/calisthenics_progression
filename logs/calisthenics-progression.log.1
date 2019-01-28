@@ -1,0 +1,107 @@
+2019-01-28 21:30:08,084 INFO: Calisthenics-Progression startup [in C:\Users\richi\projects\calisthenics-progression\app\__init__.py:28]
+2019-01-28 21:30:18,029 ERROR: Exception on /edit_profile [POST] [in c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py:1761]
+Traceback (most recent call last):
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\base.py", line 1230, in _execute_context
+    cursor, statement, parameters, context
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\default.py", line 536, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.IntegrityError: UNIQUE constraint failed: user.username
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask_login\utils.py", line 261, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\richi\projects\calisthenics-progression\app\routes.py", line 92, in edit_profile
+    db.session.commit()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\scoping.py", line 162, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\session.py", line 1008, in commit
+    self.transaction.commit()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\session.py", line 487, in commit
+    self._prepare_impl()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\session.py", line 466, in _prepare_impl
+    self.session.flush()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\session.py", line 2424, in flush
+    self._flush(objects)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\session.py", line 2562, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\util\langhelpers.py", line 67, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\util\compat.py", line 277, in reraise
+    raise value
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\session.py", line 2522, in _flush
+    flush_context.execute()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 416, in execute
+    rec.execute(self)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 583, in execute
+    uow,
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\persistence.py", line 236, in save_obj
+    update,
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\orm\persistence.py", line 976, in _emit_update_statements
+    statement, multiparams
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\base.py", line 974, in execute
+    return meth(self, multiparams, params)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\sql\elements.py", line 273, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\base.py", line 1093, in _execute_clauseelement
+    distilled_params,
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\base.py", line 1234, in _execute_context
+    e, statement, parameters, cursor, context
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\base.py", line 1452, in _handle_dbapi_exception
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\util\compat.py", line 296, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\util\compat.py", line 276, in reraise
+    raise value.with_traceback(tb)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\base.py", line 1230, in _execute_context
+    cursor, statement, parameters, context
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\sqlalchemy\engine\default.py", line 536, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.username [SQL: 'UPDATE user SET username=?, about_me=? WHERE user.id = ?'] [parameters: ('admin', 'Calisthenics beginner and the author of this page.\r\n\r\nHave fun.', 1)] (Background on this error at: http://sqlalche.me/e/gkpj)
+2019-01-28 21:34:29,845 INFO: Calisthenics-Progression startup [in C:\Users\richi\projects\calisthenics-progression\app\__init__.py:28]
+2019-01-28 21:34:40,858 ERROR: Exception on /edit_profile [POST] [in c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py:1761]
+Traceback (most recent call last):
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask_login\utils.py", line 261, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\richi\projects\calisthenics-progression\app\routes.py", line 89, in edit_profile
+    if form.validate_on_submit():
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\flask_wtf\form.py", line 101, in validate_on_submit
+    return self.is_submitted() and self.validate()
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\wtforms\form.py", line 310, in validate
+    return super(Form, self).validate(extra)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\wtforms\form.py", line 152, in validate
+    if not field.validate(self, extra):
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\wtforms\fields\core.py", line 206, in validate
+    stop_validation = self._run_validation_chain(form, chain)
+  File "c:\users\richi\projects\calisthenics-progression\cp_env\lib\site-packages\wtforms\fields\core.py", line 226, in _run_validation_chain
+    validator(form, self)
+  File "C:\Users\richi\projects\calisthenics-progression\app\forms.py", line 42, in validate_username
+    if user is not None:
+UnboundLocalError: local variable 'user' referenced before assignment
+2019-01-28 21:35:46,821 INFO: Calisthenics-Progression startup [in C:\Users\richi\projects\calisthenics-progression\app\__init__.py:28]
+2019-01-28 21:35:50,479 INFO: Calisthenics-Progression startup [in C:\Users\richi\projects\calisthenics-progression\app\__init__.py:28]
