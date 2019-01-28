@@ -1,3 +1,5 @@
 cp_env
+logs
 .vscode
 __pycache__
+
