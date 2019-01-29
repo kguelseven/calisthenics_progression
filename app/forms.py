@@ -43,5 +43,5 @@ class EditProfileForm(FlaskForm):
             raise ValidationError('This username has already been taken. Please use a different username.')
 
 class WorkoutForm(FlaskForm):
-    workout = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
+    workout = TextAreaField('Add workout', validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
