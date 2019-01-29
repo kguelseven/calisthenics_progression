@@ -3,8 +3,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, WorkoutForm
+from app.models import User, Workout
 
 @app.before_request
 def before_request():
@@ -13,22 +13,25 @@ def before_request():
         db.session.commit()
 
 
-@app.route("/")
-@app.route("/index")
+@app.route("/", methods=['GET', 'POST'] )
+@app.route("/index", methods=['GET', 'POST'])
 @login_required
 def index():
-    workouts = [
-        {
-            'athlet': {'username': 'Richi'},
-            'title': 'Workout 1'
-        },
-        {
-            'athlet': {'username': 'Ali'},
-            'title': 'Workout 2'
-        }
-    ]
-    return render_template('index.html', title='Home', workouts=workouts)
+    form = WorkoutForm()
+    if form.validate_on_submit():
+        workout = Workout(title=form.workout.data, athlet=current_user)
+        db.session.add(workout)
+        db.session.commit()
+        flash('Your workout is now live!')
+        return redirect(url_for('index'))
+    workouts = current_user.followed_workouts().all()
+    return render_template("index.html", title='Home Page', form=form, workouts=workouts)
 
+@app.route('/explore')
+@login_required
+def explore():
+    workouts = Workout.query.order_by(Workout.timestamp.desc()).all()
+    return render_template('index.html', title='Explore', workouts=workouts)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

@@ -1,6 +1,11 @@
 <table>
-        <tr>
+        <tr valign="top">
             <td><img src="{{ workout.athlet.avatar(36) }}"></td>
-            <td>{{ workout.athlet.username }} completed: <b>{{ workout.title }}</td>
+            <td>
+                <a href="{{ url_for('user', username=workout.athlet.username) }}">
+                    {{ workout.athlet.username }}
+                </a>
+                completed: <b>{{ workout.title }}
+            </td>
         </tr>
     </table>

@@ -2,7 +2,20 @@
 
 {% block content %}
     <h1>Hi {{ current_user.username }}</h1>
+    {% if form %}
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.workout.label }}<br>
+            {{form.workout(cols=32, rows=4) }}<br>
+            {% for error in form.workout.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    {% endif %}
     {% for workout in workouts %}
-    <div><p>{{ workout.athlet.username }} completed: <b>{{ workout.title}}</b></p></div>
+        {% include '_workout.html' %}
     {% endfor %}
 {% endblock %}
