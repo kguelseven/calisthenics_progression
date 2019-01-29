@@ -29,4 +29,10 @@
     {% for workout in workouts %}
         {% include '_workout.html' %}
     {% endfor %}
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Newer workouts</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Older workouts</a>
+    {% endif %}
 {% endblock %}

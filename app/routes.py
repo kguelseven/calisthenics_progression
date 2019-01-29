@@ -83,17 +83,13 @@ def register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username) .first_or_404()
-    workouts = [
-        {
-            'athlet': user,
-            'title': 'Workout 1'
-        },
-        {
-            'athlet': user,
-            'title': 'Workout 2'
-        }
-    ]
-    return render_template('user.html', user=user, workouts=workouts)
+    page = request.args.get('page', 1, type=int)
+    workouts = user.workouts.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('user', username=user.username, page=workouts.next_num) \
+        if workouts.has_next else None
+    prev_url = url_for('user', username=user.username, page=workouts.prev_num) \
+        if workouts.has_prev else None
+    return render_template('user.html', user=user, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
