@@ -1,19 +1,23 @@
-from flask import render_template, flash, redirect, url_for, request, current_app
+from functools import wraps
+from flask import Flask, render_template, flash, redirect, url_for, request
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app import db
+from app import app, db
 from app.main.forms import EditProfileForm, WorkoutForm
 from app.models import User, Workout
 from app.main import bp
+from app._config import WORKOUTS_PER_PAGE
 
+# helper functions
 @bp.before_app_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-
+# routes
 @bp.route("/", methods=['GET', 'POST'] )
 @bp.route("/index", methods=['GET', 'POST'])
 @login_required
@@ -26,7 +30,7 @@ def index():
         flash('Your workout is now live!')
         return redirect(url_for('main.index'))
     page = request.args.get('page', 1, type=int)
-    workouts = current_user.followed_workouts().paginate(page, current_app.config['WORKOUTS_PER_PAGE'], False)
+    workouts = current_user.followed_workouts().paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
     next_url = url_for('main.index', page=workouts.next_num) \
         if workouts.has_next else None
     prev_url = url_for('main.index', page=workouts.prev_num) \
@@ -37,7 +41,7 @@ def index():
 @login_required
 def explore():
     page = request.args.get('page', 1, type=int)
-    workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, current_app.config['WORKOUTS_PER_PAGE'], False)
+    workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
     next_url = url_for('main.explore', page=workouts.next_num) \
         if workouts.has_next else None
     prev_url = url_for('main.explore', page=workouts.prev_num) \
@@ -47,17 +51,17 @@ def explore():
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data) .first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
+            next_page = url_for('main.index')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -66,7 +70,7 @@ def login():
 def user(username):
     user = User.query.filter_by(username=username) .first_or_404()
     page = request.args.get('page', 1, type=int)
-    workouts = user.workouts.order_by(Workout.timestamp.desc()).paginate(page, current_app.config['WORKOUTS_PER_PAGE'], False)
+    workouts = user.workouts.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
     next_url = url_for('main.user', username=user.username, page=workouts.next_num) \
         if workouts.has_next else None
     prev_url = url_for('main.user', username=user.username, page=workouts.prev_num) \
