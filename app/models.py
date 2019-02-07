@@ -83,6 +83,33 @@ class Workout(db.Model):
     title = db.Column(db.String(80), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    exercises = db.relationship('Exercise', backref='workout', lazy='dynamic')
 
     def __repr__(self):
         return '<Workout {}>'.format(self.title)
+
+class Exercises(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), index=True)
+    workout_id = db.Column(db.Integer, db.ForeignKey('workout.id'))
+    exercise = db.relationship('Exercise', backref='exercise', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Exercises {}>'.format(self.title)
+
+class Exercise(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order = db.Column(db.Integer, unique=True)
+    workout_id = db.Column(db.Integer, db.ForeignKey('workout.id'), primary_key=True)
+    exercise_id = db.Column(db.Integer, db.ForeignKey('exercises.id'))
+    sets = db.relationship('Set', backref='exercise', lazy='dynamic')
+
+
+class Set(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order = db.Column(db.Integer, unique=True)
+    reps = db.Column(db.Integer)
+    exercise_id = db.Column(db.Integer, db.ForeignKey('exercise.id'), primary_key=True)
+
+    def __repr__(self):
+        return '<Reps {}>'.format(self.reps)
