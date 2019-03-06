@@ -24,7 +24,7 @@ def add_workout():
     if request.method == 'POST':
         user = User.query.filter_by(username=User.username).first()
 
-        workout = Workout(timestamp=datetime.utcnow(), user_id=user.id)
+        workout = Workout(timestamp=datetime.utcnow(), user_id=user.id, title=user.username)
 
         exercise_count = int(request.form['exercise_count'])
 
@@ -67,6 +67,17 @@ def index():
         if workouts.has_prev else None
     return render_template('index.html', title='Home', form=form, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
+@bp.route('/history/')
+@login_required
+def history():
+    page = request.args.get('page', 1, type=int)
+    workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('main.explore', page=workouts.next_num) \
+        if workouts.has_next else None
+    prev_url = url_for('main.explore', page=workouts.prev_num) \
+        if workouts.has_prev else None
+    return render_template('history.html', title='History', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+    
 @bp.route('/explore')
 @login_required
 def explore():

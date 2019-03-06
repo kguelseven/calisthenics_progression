@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<h1>Workout History</h1>
+{% for workout in workouts %}
+    <h2>Datum: {{ workout.timestamp }}</h2>
+    {% set exercises = workout.exercises.all() %}
+
+    {% for exercise in exercises %}
+
+        <h3>Exercise: {{ exercise.exercise.title }}</h3>
+
+        {% set sets = exercise.sets.all() %}
+
+        {% for s in sets %}
+            <h4>Progression: {{ s.progression }}</h4>
+            <h4>Reps: {{ s.reps }}</h4>
+        {% endfor %}
+
+    {% endfor %}
+
+{% endfor %}
+{% endblock %}
