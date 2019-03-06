@@ -11,7 +11,16 @@
             </a>
             completed {{ moment(workout.timestamp).fromNow() }}:
             <br>
-            {{ workout.title }}
+            <h3>{{ workout.title }}</h3>
+            {% set exercises = workout.exercises.all() %}
+            {% for exercise in exercises %}
+                <h4>{{ exercise.exercise.title }}</h4>
+                {% set sets = exercise.sets.all() %}
+                {% for s in sets %}
+                <p>Progression: {{ s.progression }}</p>
+                <p>Reps: {{ s.reps }}</p>
+                {% endfor %}
+            {% endfor %}
         </td>
     </tr>
 </table>
