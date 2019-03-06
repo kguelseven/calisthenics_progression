@@ -5,6 +5,7 @@
 <h1>Workout History</h1>
 {% for workout in workouts %}
     <h2>Datum: {{ workout.timestamp }}</h2>
+    <h2>{{ workout.title }}</h2>
     {% set exercises = workout.exercises.all() %}
 
     {% for exercise in exercises %}

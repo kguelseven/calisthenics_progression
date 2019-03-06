@@ -19,7 +19,3 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('This username has already been taken. Please use a different username.')
-
-class WorkoutForm(FlaskForm):
-    workout = TextAreaField('Add workout', validators=[DataRequired(), Length(min=1, max=140)])
-    submit = SubmitField('Submit')

@@ -4,10 +4,6 @@
 {% block app_content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     <p><a href="{{ url_for('main.add_workout') }}">Add workout</a></p>
-    {% if form %}
-    {{ wtf.quick_form(form) }}
-    <br>
-    {% endif %}
     {% for workout in workouts %}
         {% include '_workout.html' %}
     {% endfor %}

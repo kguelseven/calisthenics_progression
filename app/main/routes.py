@@ -5,7 +5,6 @@ from flask_login import current_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app import db, app
-from app.main.forms import EditProfileForm, WorkoutForm
 from app.models import User, Workout, Exercises, Exercise, Set
 from app.main import bp
 from app._config import WORKOUTS_PER_PAGE
@@ -19,12 +18,35 @@ def before_request():
 
 # routes
 
+@bp.route("/", methods=['GET', 'POST'] )
+@bp.route("/index", methods=['GET', 'POST'])
+@login_required
+def index():
+    page = request.args.get('page', 1, type=int)
+    workouts = current_user.followed_workouts().paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=workouts.next_num) \
+        if workouts.has_next else None
+    prev_url = url_for('main.index', page=workouts.prev_num) \
+        if workouts.has_prev else None
+    return render_template('index.html', title='Home', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+
+@bp.route('/explore')
+@login_required
+def explore():
+    page = request.args.get('page', 1, type=int)
+    workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('main.explore', page=workouts.next_num) \
+        if workouts.has_next else None
+    prev_url = url_for('main.explore', page=workouts.prev_num) \
+        if workouts.has_prev else None
+    return render_template('index.html', title='Explore', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+
 @bp.route('/add_workout', methods=['POST', 'GET'])
 def add_workout():
     if request.method == 'POST':
         user = User.query.filter_by(username=User.username).first()
 
-        workout = Workout(timestamp=datetime.utcnow(), user_id=user.id, title=user.username)
+        workout = Workout(timestamp=datetime.utcnow(), user_id=user.id, title=request.form['wtitle'])
 
         exercise_count = int(request.form['exercise_count'])
 
@@ -48,25 +70,6 @@ def add_workout():
     exercises = Exercises.query.all()
     return render_template('add_workout.html', exercises=exercises)
 
-@bp.route("/", methods=['GET', 'POST'] )
-@bp.route("/index", methods=['GET', 'POST'])
-@login_required
-def index():
-    form = WorkoutForm()
-    if form.validate_on_submit():
-        workout = Workout(title=form.workout.data, athlet=current_user)
-        db.session.add(workout)
-        db.session.commit()
-        flash('Your workout is now live!')
-        return redirect(url_for('main.index'))
-    page = request.args.get('page', 1, type=int)
-    workouts = current_user.followed_workouts().paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
-    next_url = url_for('main.index', page=workouts.next_num) \
-        if workouts.has_next else None
-    prev_url = url_for('main.index', page=workouts.prev_num) \
-        if workouts.has_prev else None
-    return render_template('index.html', title='Home', form=form, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
-
 @bp.route('/history/')
 @login_required
 def history():
@@ -77,17 +80,6 @@ def history():
     prev_url = url_for('main.explore', page=workouts.prev_num) \
         if workouts.has_prev else None
     return render_template('history.html', title='History', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
-    
-@bp.route('/explore')
-@login_required
-def explore():
-    page = request.args.get('page', 1, type=int)
-    workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
-    next_url = url_for('main.explore', page=workouts.next_num) \
-        if workouts.has_next else None
-    prev_url = url_for('main.explore', page=workouts.prev_num) \
-        if workouts.has_prev else None
-    return render_template('index.html', title='Explore', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
@@ -117,21 +109,6 @@ def user(username):
     prev_url = url_for('main.user', username=user.username, page=workouts.prev_num) \
         if workouts.has_prev else None
     return render_template('user.html', user=user, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
-
-@bp.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm(current_user.username)
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-        db.session.commit()
-        flash('Your changes have been saved')
-        return redirect(url_for('main.edit_profile'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 @bp.route('/follow/<username>')
 @login_required

@@ -5,6 +5,8 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
                 <form method="POST" action="{{ url_for('main.add_workout') }}" id="workout">
+                    <label>Workout</label>
+                    <input type="text" class="form-control" name="wtitle" id="wtitle" placeholder="workout title">
                     <label>Exercise</label>
                     <select name="exercise1" class="form-control" form="workout">
                         {% for exercise in exercises %}
@@ -20,6 +22,7 @@
                     <button type="button" class="btn btn-info addSet" exercise="1">Add Set</button>           
                     <button type="button" id="addExercise" class="btn btn-success">Add Exercise</button>
                     <input type="hidden" name="exercise_count" value="1">
+                    <br><br>
                     <button type="submit" class="btn btn-primary btn-block">Add Workout</button>
                 </form>
                 <br>
