@@ -7,8 +7,8 @@ $(document).ready(function() {
     
 
     $("#addExercise").on('click', function() {
-        exercise_num = Number($("[title=exercise_count]").val()) + 1;
-        $("[title=exercise_count]").val(exercise_num);
+        exercise_num = Number($("[name=exercise_count]").val()) + 1;
+        $("[name=exercise_count]").val(exercise_num);
 
         exercise_compiled = exercise_template({exercise_num : exercise_num});
         set_compiled = set_template({exercise_num : exercise_num});
