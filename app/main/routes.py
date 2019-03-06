@@ -29,17 +29,18 @@ def add_workout():
         exercise_count = int(request.form['exercise_count'])
 
         for exercise_num in range(1,exercise_count + 1):
-            exercise = Exercise(order=exercise_num, exercise_id=request.form['exercise'+str(exercise_num)], workout=workout)
+            exercise = Exercise(exercise_order=exercise_num, exercise_id=request.form['exercise'+str(exercise_num)], workout=workout)
 
             progressions = request.form.getlist('progression' + str(exercise_num))
             reps = request.form.getlist('reps' + str(exercise_num))
-
+            db.session.add(workout)
+            exercise = Exercise.query.order_by(Exercise.id.desc()).first()
             set_order = 1
             for progression, rep in zip(progressions, reps):
-                work_set = Set(order=set_order, exercise=exercise, progression=progression, reps=rep)
+                work_set = Set(set_order=set_order, exercise=exercise, progression=progression, reps=rep)
                 set_order += 1
 
-        db.session.add(workout)
+        db.session.add(work_set)
         db.session.commit()
 
         return redirect(url_for('main.index'))

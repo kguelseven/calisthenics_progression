@@ -98,15 +98,16 @@ class Exercises(db.Model):
 
 class Exercise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order = db.Column(db.Integer, unique=True)
+    exercise_order = db.Column(db.Integer, unique=True)
     workout_id = db.Column(db.Integer, db.ForeignKey('workout.id'), primary_key=True)
     exercise_id = db.Column(db.Integer, db.ForeignKey('exercises.id'))
     sets = db.relationship('Set', backref='exercise', lazy='dynamic')
 
 
 class Set(db.Model):
+    __tablename__ = "exercise_sets"
     id = db.Column(db.Integer, primary_key=True)
-    order = db.Column(db.Integer, unique=True)
+    set_order = db.Column(db.Integer, unique=True)
     progression = db.Column(db.String(80), index=True)
     reps = db.Column(db.Integer)
     exercise_id = db.Column(db.Integer, db.ForeignKey('exercise.id'), primary_key=True)

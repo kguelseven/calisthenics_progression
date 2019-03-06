@@ -3,7 +3,15 @@ from dotenv import load_dotenv
 
 # folder where this script lives
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, '.env'))
+# load_dotenv(os.path.join(basedir, '.env'))
+
+# Config MySQL
+MYSQL_HOST = 'localhost'
+MYSQL_USER = 'testuser'
+MYSQL_PASSWORD = '11+11Gibt22!'
+MYSQL_DB = 'calisthenics'
+MYSQL_CURSORCLASS = 'DictCursor'
+SECRET_KEY = os.environ.get('SECRET KEY') or 'you-will-never-guess'
 
 DATABASE = 'app.db'
 SECRET_KEY = os.environ.get('SECRET KEY') or 'you-will-never-guess'
@@ -21,7 +29,7 @@ ADMINS = ['your-email@example.com']
 DATABASE_PATH = os.path.join(basedir, DATABASE)
 
 # the database uri
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
+SQLALCHEMY_DATABASE_URI = 'mysql://richi:11+11Gibt22!@localhost/calisthenics'
 
 
 

@@ -1,7 +1,9 @@
+_config.py
 cp_env
 logs
 .vscode
 __pycache__
 .env
+
 
 
