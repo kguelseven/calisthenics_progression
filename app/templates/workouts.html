@@ -2,13 +2,8 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Explore workouts from all athletes!</h1>
-    <p>Buttons doesn't work yet!</p>
-    <fomr method="POST" action="">
-    <input type="submit" name='checked' value="All workouts" class="btn btn-dark">
-    <input type="submit" name='unchecked' value="Only followed workouts" class="btn btn-dark">
-    </fomr>
-    <hr>
+    <h1>Hi {{ current_user.username }}, welcome back!</h1>
+    <p><a href="{{ url_for('main.add_workout') }}" class="btn btn-primary" role="button">Add workout</a></p>
     {% for workout in workouts %}
         {% include '_workout.html' %}
     {% endfor %}

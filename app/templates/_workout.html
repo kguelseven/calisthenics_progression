@@ -14,7 +14,7 @@
             <table class="table table-hover table-bordered table-responsive">
                 <thead>
                 <th colspan="7">
-                    <h3>{{ workout.title }}: {{ workout.timestamp }}</h3>
+                    <h3>{{ workout.title }}: {{ moment(workout.timestamp).format('DD.MM.YYYY, HH:mm') }}</h3>
                 </th>
                 </thead>
                     <tr>

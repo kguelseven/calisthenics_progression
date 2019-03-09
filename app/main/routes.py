@@ -20,31 +20,35 @@ def before_request():
 
 @bp.route("/", methods=['GET', 'POST'] )
 @bp.route("/index", methods=['GET', 'POST'])
-@login_required
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.workouts'))
+    return render_template('index.html', title='Home')
+
+@bp.route("/workouts", methods=['GET', 'POST'])
+@login_required
+def workouts():
     page = request.args.get('page', 1, type=int)
-    workouts = current_user.followed_workouts().paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
-    next_url = url_for('main.index', page=workouts.next_num) \
-        if workouts.has_next else None
-    prev_url = url_for('main.index', page=workouts.prev_num) \
-        if workouts.has_prev else None
-    return render_template('index.html', title='Home', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+    user = current_user.get_id()
+    workouts = Workout.query.filter_by(user_id=current_user.get_id()).order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=workouts.next_num) if workouts.has_next else None
+    prev_url = url_for('main.index', page=workouts.prev_num) if workouts.has_prev else None
+    return render_template('workouts.html', title='Home', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/explore')
 @login_required
 def explore():
     page = request.args.get('page', 1, type=int)
     workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
-    next_url = url_for('main.explore', page=workouts.next_num) \
-        if workouts.has_next else None
-    prev_url = url_for('main.explore', page=workouts.prev_num) \
-        if workouts.has_prev else None
-    return render_template('index.html', title='Explore', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+    next_url = url_for('main.explore', page=workouts.next_num) if workouts.has_next else None
+    prev_url = url_for('main.explore', page=workouts.prev_num) if workouts.has_prev else None
+    return render_template('explore.html', title='Explore', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/add_workout', methods=['POST', 'GET'])
+@login_required
 def add_workout():
     if request.method == 'POST':
-        user = User.query.filter_by(username=User.username).first()
+        user = current_user
 
         workout = Workout(timestamp=datetime.utcnow(), user_id=user.id, title=request.form['wtitle'])
 
@@ -69,17 +73,6 @@ def add_workout():
 
     exercises = Exercises.query.all()
     return render_template('add_workout.html', exercises=exercises)
-
-@bp.route('/history/')
-@login_required
-def history():
-    page = request.args.get('page', 1, type=int)
-    workouts = Workout.query.order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
-    next_url = url_for('main.explore', page=workouts.next_num) \
-        if workouts.has_next else None
-    prev_url = url_for('main.explore', page=workouts.prev_num) \
-        if workouts.has_prev else None
-    return render_template('history.html', title='History', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
