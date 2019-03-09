@@ -1,4 +1,4 @@
-<table class="table table-hover">
+<table class="table table-hover table-bordered table-responsive">
     <tr>
         <td width="70px">
             <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
@@ -11,16 +11,26 @@
             </a>
             completed {{ moment(workout.timestamp).fromNow() }}:
             <br>
-            <h3>{{ workout.title }}: {{ workout.timestamp }}</h3>
-            {% set exercises = workout.exercises.all() %}
-            {% for exercise in exercises %}
-                    <h4>{{ exercise.exercise.title }}</h4>
-                    {% set sets = exercise.sets.all() %}
-                    {% for s in sets %}
-                    <p>Progression: {{ s.progression }}</p>
-                    <p>Reps: {{ s.reps }}</p>
-                {% endfor %}
-            {% endfor %}
+            <table class="table table-hover table-bordered table-responsive">
+                <thead>
+                <th colspan="7">
+                    <h3>{{ workout.title }}: {{ workout.timestamp }}</h3>
+                </th>
+                </thead>
+                    <tr>
+                        {% set exercises = workout.exercises.all() %}
+                        {% for exercise in exercises %}
+                            <td>
+                                <h4>{{ exercise.exercise.title }}</h4>
+                                {% set sets = exercise.sets.all() %}
+                                {% for s in sets %}
+                                <p>Progression: {{ s.progression }}</p>
+                                <p>Reps: {{ s.reps }}</p>
+                            {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+            </table>
         </td>
     </tr>
 </table>
