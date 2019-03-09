@@ -25,4 +25,5 @@ $(document).ready(function() {
         console.log(set_compiled);
         $("#exercise" + exercise_num).append(set_compiled);
     });
+
 });
