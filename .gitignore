@@ -3,6 +3,7 @@ logs
 .vscode
 __pycache__
 .env
+migrations
 
 
 
