@@ -4,10 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app import db, app
-from app.models import User, Workout, Exercises, Exercise, Set
-from app.main import bp
-from app._config import WORKOUTS_PER_PAGE
+from project import db, app
+from project.models import User, Workout, Exercises, Exercise, Set
+from project.main import bp
+from project._config import WORKOUTS_PER_PAGE
 
 # helper functions
 @bp.before_app_request

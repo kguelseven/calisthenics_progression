@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import unittest
-from app import create_app, db
-from app.models import User, Workout
+from project import create_app, db
+from project.models import User, Workout
 from config import Config
 
 class TestConfig(Config):
