@@ -3,25 +3,20 @@
 
 {% block app_content %}
     <div class="container">
-        <div class="alert alert-info" role="alert">
-            <h2>Hi visitor</h2>
-            <h4>I like calisthenics and this app is used as a personal workout tracker</h4>
-        </div>
-        <div class="alert alert-danger" role="alert">
-            <h2>I am also a hobby developer. This means..</h2>
-            <h4><li>This site is also used for educational purposes</li></h4>
-            <h4><li>No guarantee of availability</li></h4>
-            <h4><li>Regularly changing and adding new features</li></h4>           
-        </div>
-        <div class="alert alert-success" role="alert">
-                <h2>Features</h2>
-                <h4><li>Adding workouts wiht multiple exercises, progression and reps</li></h4>
-                <h4><li>Exploring and following workouts from other users</li></h4>
-                <img src="/static/img/add_workout.png" class="img-fluid" alt="Responsive image">
-                <hr>
-                <img src="/static/img/workout_list_item.png" class="img-fluid" alt="Responsive image">
-                <h2>Cooming soon</h2>
-                <h4><li>Creating exercises</li></h4>           
+        <div class>
+            <h1>Welcome!</h1>
+            <br>
+            <p>You must register to use the Calisthenic Progression Tracker.</p>
+            <p><a href="{{ url_for('auth.register') }}">Click to Register!</a>.</p>
+            <hr>
+            <h4>Features:</h4>
+            <li>Adding workouts with multiple exercises, progression and reps</li>
+            <li>Exploring and following workouts from other users</li>
+            <h4>Features coming soon:</h4>
+            <li>Creating exercises</li>
+            <li>Search functions</li>
+            <li>Search functions</li>
+            <li>Export and analysis</li>
         </div>
     </div>
 {% endblock %}

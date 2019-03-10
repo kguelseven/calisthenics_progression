@@ -8,6 +8,8 @@ from project import db, app
 from project.models import User, Workout, Exercises, Exercise, Set
 from project.main import bp
 from project._config import WORKOUTS_PER_PAGE
+from project.decorators import check_confirmed
+
 
 # helper functions
 @bp.before_app_request
@@ -46,6 +48,7 @@ def explore():
 
 @bp.route('/add_workout', methods=['POST', 'GET'])
 @login_required
+@check_confirmed
 def add_workout():
     if request.method == 'POST':
         user = current_user
@@ -70,29 +73,12 @@ def add_workout():
         db.session.commit()
 
         return redirect(url_for('main.index'))
-
     exercises = Exercises.query.all()
     return render_template('add_workout.html', exercises=exercises)
 
-@bp.route("/login", methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data) .first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('auth.login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main.index')
-        return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
-
 @bp.route('/user/<username>')
 @login_required
+@check_confirmed
 def user(username):
     user = User.query.filter_by(username=username) .first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -105,6 +91,7 @@ def user(username):
 
 @bp.route('/follow/<username>')
 @login_required
+@check_confirmed
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -120,6 +107,7 @@ def follow(username):
 
 @bp.route('/unfollow/<username>')
 @login_required
+@check_confirmed
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:

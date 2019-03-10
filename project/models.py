@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
     admin = db.Column(db.Boolean, nullable=False, default=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
+    password_reset_token = db.Column(db.String(255), nullable=True)
     about_me = db.Column(db.String(280))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     registered_on = db.Column(db.DateTime, nullable=False)
@@ -34,10 +35,12 @@ class User(UserMixin, db.Model):
     def __init__(self, username, email, admin, confirmed, confirmed_on=None):
         self.username = username
         self.email = email
-        self.registered_on = datetime.now()
+        self.registered_on = datetime.utcnow()
         self.admin = admin
         self.confirmed = confirmed
         self.confirmed_on = confirmed_on
+        self.password_reset_token = password_reset_token
+
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -47,19 +50,6 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def get_reset_password_token(self, expires_in=600):
-        return jwt.encode({'reset_password': self.id, 'exp': time() + expires_in},
-        app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
-
-    @staticmethod
-    def verify_reset_password_token(token):
-        try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
-                algorithms=['HS256'])['reset_password']
-        except:
-            return
-        return User.query.get(id)
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
