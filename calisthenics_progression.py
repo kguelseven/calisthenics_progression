@@ -1,4 +1,10 @@
-from project import app
+from setuptools import setup
 
-if __name__ == '__main__':
-    app.run()
+setup(
+    name='calisisthenics_progression',
+    packages=['project'],
+    include_package_data=True,
+    install_requires=[
+        'flask',
+    ],
+)

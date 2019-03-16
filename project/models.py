@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     workouts = db.relationship('Workout', backref='athlet', lazy='dynamic')
 
-    def __init__(self, username, email, admin, confirmed, confirmed_on=None):
+    def __init__(self, username, email, admin, confirmed, confirmed_on=None, password_reset_token=None):
         self.username = username
         self.email = email
         self.registered_on = datetime.utcnow()
@@ -59,11 +59,11 @@ class User(UserMixin, db.Model):
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
-    
+
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
-    
+
     def is_following(self, user):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
 

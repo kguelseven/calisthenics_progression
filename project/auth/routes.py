@@ -160,7 +160,6 @@ def forgot_new(token):
         flash('Can not reset the password, try again.', 'danger')
 
     return redirect(url_for('main.index'))
-
 '''
 @bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
