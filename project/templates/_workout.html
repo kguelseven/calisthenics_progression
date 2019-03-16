@@ -1,4 +1,5 @@
-<table class="table table-hover table-bordered table-responsive">
+<div class="table-responsive">
+<table class="table table-hover table-bordered">
     <tr>
         <td width="70px">
             <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
@@ -11,7 +12,7 @@
             </a>
             completed {{ moment(workout.timestamp).fromNow() }}:
             <br>
-            <table class="table table-hover table-bordered table-responsive">
+            <table class="table table-hover table-bordered">
                 <thead>
                 <th colspan="7">
                     <h3>{{ workout.title }}: {{ moment(workout.timestamp).format('DD.MM.YYYY, HH:mm') }}</h3>
@@ -34,3 +35,4 @@
         </td>
     </tr>
 </table>
+</div>
