@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>{{ ('Nachrichten') }}</h1>
+    {% for workout in messages %}
+        {% include '_messages.html' %}
+    {% endfor %}
+    <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> {{ ('neuere Nachrichten') }}
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    {{ ('ältere Nachrichten') }} <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

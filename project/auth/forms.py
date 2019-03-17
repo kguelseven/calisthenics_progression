@@ -7,7 +7,7 @@ class EditProfileForm(FlaskForm):
     username = StringField(('Username'), validators=[DataRequired()])
     about_me = TextAreaField(('About me'),
                              validators=[Length(min=0, max=280)])
-    submit = SubmitField(('Submit'))
+    submit = SubmitField('Submit')
 
     def __init__(self, original_username, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
