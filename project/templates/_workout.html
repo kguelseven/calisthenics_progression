@@ -1,38 +1,28 @@
 <div class="table-responsive">
-<table class="table table-hover table-bordered">
-    <tr>
-        <td width="70px">
-            <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
-                <img src="{{ workout.athlet.avatar(70) }}" />
-            </a>
-        </td>
-        <td>
-            <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
-                {{ workout.athlet.username }}
-            </a>
-            completed {{ moment(workout.timestamp).fromNow() }}:
-            <br>
-            <table class="table table-hover table-bordered">
-                <thead>
-                <th colspan="7">
-                    <h3>{{ workout.title }}: {{ moment(workout.timestamp).format('DD.MM.YYYY, HH:mm') }}</h3>
-                </th>
-                </thead>
-                    <tr>
-                        {% set exercises = workout.exercises.all() %}
-                        {% for exercise in exercises %}
-                            <td>
-                                <h4>{{ exercise.exercise.title }}</h4>
-                                {% set sets = exercise.sets.all() %}
-                                {% for s in sets %}
-                                <p>Progression: {{ s.progression }}</p>
-                                <p>Reps: {{ s.reps }}</p>
-                            {% endfor %}
-                            </td>
-                        {% endfor %}
-                    </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+ <table class="table table-hover table-bordered table-responsive">
+        <thead>
+        <th colspan="7">
+                <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
+                        <img src="{{ workout.athlet.avatar(35) }}" />
+                <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
+                        {{ workout.athlet.username }}
+                    </a>
+                    completed {{ moment(workout.timestamp).fromNow() }}:
+            <strong>{{ workout.title }}: {{ moment(workout.timestamp).format('DD.MM.YYYY, HH:mm') }}</p>
+        </th>
+        </thead>
+            <tr class="table-hover">
+                {% set exercises = workout.exercises.all() %}
+                {% for exercise in exercises %}
+                    <td>
+                        <p><strong>{{ exercise.exercise.title }}</strong></p>
+                        {% set sets = exercise.sets.all() %}
+                        {% for s in sets %}
+                        <p>Progression: {{ s.progression }}</p>
+                        <p>Reps: {{ s.reps }}</p>
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+  </table>
 </div>
