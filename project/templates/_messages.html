@@ -1,0 +1,21 @@
+<div class="table-responsive">
+<table class="table table-hover table-bordered">
+    <tr>
+        <td width="70px">
+            <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
+                <img src="{{ workout.athlet.avatar(70) }}" />
+            </a>
+        </td>
+        <td>
+            <a href="{{ url_for('main.user', username=workout.athlet.username) }}">
+                {{ workout.athlet.username }}
+            </a>
+            wrote {{ moment(workout.timestamp).fromNow() }}:
+            <br>
+            <br>
+            <span id="workout{{ workout.id }}">{{ workout.body }}</span>
+            <br><br>
+        </td>
+    </tr>
+</table>
+</div>
