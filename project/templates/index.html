@@ -4,18 +4,19 @@
 {% block app_content %}
     <div class="container">
         <div class="jumbotron">
-            <h1>Welcome!</h1>
+            <h1>Willkommen!</h1>
             <br>
-            <p>You must register to use the Calisthenics Progression Tracker.</p>
-            <p><a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
+            <p>Ich bin Calisthenics Enthusiast und Hobby-Entwickler. Das ist eine App um Calisthenics Workouts zu tracken.</p>
+            <p>Du musst dich registrieren um den Tracker zu verwenden:</p>
+            <p><a href="{{ url_for('auth.register') }}">Registrieren</a></p>
             <hr>
             <h4>Features:</h4>
-            <li>Adding workouts with multiple exercises, progression and reps</li>
-            <li>Exploring and following workouts from other users</li>
-            <h4>Features coming soon:</h4>
-            <li>Creating exercises</li>
-            <li>Search functions</li>
-            <li>Export and analysis</li>
+            <li>Workouts mit mehreren &Uuml;bungen und Sets erstellen</li>
+            <li>Workouts von anderen Benutzern entdecken und folgen</li>
+            <h4>Demn&auml;chst verfügbar:</h4>
+            <li>&Uuml;bungen erstellen</li>
+            <li>Suchfunktion</li>
+            <li>Export und Auswertungen</li>
         </div>
     </div>
 {% endblock %}

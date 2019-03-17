@@ -6,7 +6,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <form method="POST" action="{{ url_for('main.add_workout') }}" id="workout">
                     <label>Workout</label>
-                    <input type="text" class="form-control" name="wtitle" id="wtitle" placeholder="workout title">
+                    <input type="text" class="form-control" name="wtitle" id="wtitle" placeholder="Workout Titel">
                     <label>Exercise</label>
                     <select name="exercise1" class="form-control" form="workout">
                         {% for exercise in exercises %}

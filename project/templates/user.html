@@ -12,7 +12,7 @@
                 {% endif %}
                 <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
                 {% if user == current_user %}
-                <p><a href="{{ url_for('auth.edit_profile') }}">Edit your profile</a></p>
+                <p><a href="{{ url_for('auth.edit_profile') }}">Profil bearbeiten</a></p>
                 {% elif not current_user.is_following(user) %}
                 <p><a href="{{ url_for('main.follow', username=user.username) }}">Follow</a></p>
                 {% else %}
@@ -28,12 +28,12 @@
         <ul class="pager">
             <li class="previous{% if not prev_url %} disabled{% endif %}">
                 <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Newer workout
+                    <span aria-hidden="true">&larr;</span> neuere Workouts
                 </a>
             </li>
             <li class="next{% if not next_url %} disabled{% endif %}">
                 <a href="{{ next_url or '#' }}">
-                    Older workout <span aria-hidden="true">&rarr;</span>
+                    &auml;ltere Workouts <span aria-hidden="true">&rarr;</span>
                 </a>
             </li>
         </ul>

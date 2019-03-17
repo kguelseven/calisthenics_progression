@@ -2,11 +2,11 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Explore workouts from all athletes!</h1>
-    <p>Buttons doesn't work yet!</p>
+    <h1>Workouts von anderen Athleten entdecken</h1>
+    <p>Die Filter funktionieren noch nicht</p>
     <fomr method="POST" action="">
-    <input type="submit" name='checked' value="All workouts" class="btn btn-dark">
-    <input type="submit" name='unchecked' value="Only followed workouts" class="btn btn-dark">
+    <input type="submit" name='checked' value="Alle Workouts" class="btn btn-dark">
+    <input type="submit" name='unchecked' value="Followed Workouts" class="btn btn-dark">
     </fomr>
     <hr>
     {% for workout in workouts %}
@@ -16,12 +16,12 @@
         <ul class="pager">
             <li class="previous{% if not prev_url %} disabled{% endif %}">
                 <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Newer workouts
+                    <span aria-hidden="true">&larr;</span> neuere Workouts
                 </a>
             </li>
             <li class="next{% if not next_url %} disabled{% endif %}">
                 <a href="{{ next_url or '#' }}">
-                    Older workouts <span aria-hidden="true">&rarr;</span>
+                    &auml;ltere Workouts <span aria-hidden="true">&rarr;</span>
                 </a>
             </li>
         </ul>
