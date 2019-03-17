@@ -3,11 +3,6 @@
 
 {% block app_content %}
     <h1>Workouts von anderen Athleten entdecken</h1>
-    <p>Die Filter funktionieren noch nicht</p>
-    <fomr method="POST" action="">
-    <input type="submit" name='checked' value="Alle Workouts" class="btn btn-dark">
-    <input type="submit" name='unchecked' value="Followed Workouts" class="btn btn-dark">
-    </fomr>
     <hr>
     {% for workout in workouts %}
         {% include '_workout.html' %}
