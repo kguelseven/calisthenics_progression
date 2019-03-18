@@ -19,6 +19,7 @@
                         {% set sets = exercise.sets.all() %}
                         {% for s in sets %}
                         <p>Progression: {{ s.progression }}</p>
+                        <p>Reps: {{s.reps }}</p>
                     {% endfor %}
                     </td>
                 {% endfor %}
