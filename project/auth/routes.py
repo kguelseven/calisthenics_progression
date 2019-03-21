@@ -19,14 +19,14 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data) .first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Ungültiger Benutzername oder Passwort')
             return redirect(url_for('auth.login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('main.index')
         return redirect(next_page)
-    return render_template('auth/login.html', title='Sign In', form=form)
+    return render_template('auth/login.html', title='Anmelden', form=form)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -37,12 +37,12 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash('Your changes have been saved')
+        flash('Deine Änderungen wurden gespeichert')
         return redirect(url_for('auth.edit_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile', form=form)
+    return render_template('edit_profile.html', title='Profil bearbeiten', form=form)
 
 @bp.route("/logout")
 def logout():
@@ -62,19 +62,19 @@ def register():
         token = generate_confirmation_token(user.email)
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('email/activate.html', confirm_url=confirm_url)
-        subject = 'Please confirm your email'
+        subject = 'Bitte Email-Adresse bestätigen.'
         send_email(user.email, subject, html)
 
         login_user(user)
-        flash('A confirmation email has been sent via email.', 'success')
+        flash('Eine Bestätigungsmail wurde versendet.', 'success')
         return redirect(url_for('main.index'))
-    return render_template('auth/register.html', title='Register', form=form)
+    return render_template('auth/register.html', title='Registrieren', form=form)
 
 @bp.route('/confirm/<token>')
 @login_required
 def confirm_email(token):
     if current_user.confirmed:
-        flash('Account already confirmed. Please login.', 'success')
+        flash('Das Konto wurde bereits bestätigt. Bitte anmelden.', 'success')
         return redirect(url_for('main.index'))
     email = confirm_token(token)
     user = User.query.filter_by(email=current_user.email).first_or_404()
@@ -83,9 +83,9 @@ def confirm_email(token):
         user.confirmed_on = datetime.utcnow()
         db.session.add(user)
         db.session.commit()
-        flash('You have confirmed your account. Thanks!', 'success')
+        flash('Du hast dein Konto bestätigt. Vielen Dank!', 'success')
     else:
-        flash('The confirmation link is invalid or has expired.', 'danger')
+        flash('Der Bestätigungslink ist nicht gültig oder abgelaufen.', 'danger')
     return redirect(url_for('main.index'))
 
 @bp.route('/unconfirmed')
@@ -101,9 +101,9 @@ def resend_confirmation():
     token = generate_confirmation_token(current_user.email)
     confirm_url = url_for('auth.confirm_email', token=token, _external=True)
     html = render_template('email/activate.html', confirm_url=confirm_url)
-    subject = "Please confirm your email"
+    subject = "Bitte Email-Adresse bestätigen."
     send_email(current_user.email, subject, html)
-    flash('A new confirmation email has been sent.', 'success')
+    flash('Eine neue Bestätigungsmail wurde versendet.', 'success')
     return redirect(url_for('auth.register'))
 
 @bp.route('/forgot',  methods=['GET', 'POST'])
@@ -121,10 +121,10 @@ def forgot():
         html = render_template('auth/reset.html',
                                username=user.email,
                                reset_url=reset_url)
-        subject = "Reset your password"
+        subject = "Passwort zurücksetzen"
         send_email(user.email, subject, html)
 
-        flash('A password reset email has been sent via email.', 'success')
+        flash('Eine Email zum zurücksetzen des Passwortes wurde versendet', 'success')
         return redirect(url_for("main.index"))
 
     return render_template('auth/forgot.html', form=form)
@@ -147,47 +147,18 @@ def forgot_new(token):
 
                 login_user(user)
 
-                flash('Password successfully changed.', 'success')
+                flash('Passwort wurde erfolgreich geändert.', 'success')
                 return redirect(url_for('auth.login'))
 
             else:
-                flash('Password change was unsuccessful.', 'danger')
+                flash('Passwort konnte nicht geändert werden.', 'danger')
                 return redirect(url_for('auth.login'))
         else:
-            flash('You can now change your password.', 'success')
+            flash('Du kannst dein Passwort jetzt ändern.', 'success')
             return render_template('auth/forgot_new.html', form=form)
     else:
-        flash('Can not reset the password, try again.', 'danger')
+        flash('Das Passwort konnte nicht zurückgesetzt werden. Bitte erneut versuchen.', 'danger')
 
     return redirect(url_for('main.index'))
-'''
-@bp.route('/reset_password_request', methods=['GET', 'POST'])
-def reset_password_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-    form = ResetPasswordRequestForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_password_reset_email(user)
-            flash('Check your email for the instructions to reset your password')
-        return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password_request.html', title='Reset Password', form=form)
-
-@bp.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-    user = User.verify_reset_password_token(token)
-    if not user:
-        return redirect(url_for('main.index'))
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        user.set_password(form.password.data)
-        db.session.commit()
-        flash('Your password has been reset.')
-        return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password.html', form=form)
-'''
 
 
