@@ -1,14 +1,10 @@
-from functools import wraps
-from flask import Flask, render_template, flash, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from werkzeug.urls import url_parse
 from datetime import datetime
 from project import db, app
 from project.models import User, Workout, Exercises, Exercise, Set, Message, Notification
 from project.main import bp
 from project.main.forms import MessageForm
-from project._config import WORKOUTS_PER_PAGE
 from project.decorators import check_confirmed
 
 
@@ -32,7 +28,6 @@ def index():
 @login_required
 def workouts():
     page = request.args.get('page', 1, type=int)
-    user = current_user.get_id()
     workouts = Workout.query.filter_by(user_id=current_user.get_id()).order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
     next_url = url_for('main.index', page=workouts.next_num) if workouts.has_next else None
     prev_url = url_for('main.index', page=workouts.prev_num) if workouts.has_prev else None

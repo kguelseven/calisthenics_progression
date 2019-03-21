@@ -5,7 +5,6 @@ from flask_login import UserMixin
 from hashlib import md5
 import json
 from time import time
-import jwt
 
 # Followers association table
 followers = db.Table('followers',
