@@ -35,6 +35,7 @@ def workouts():
 
 @bp.route('/explore')
 @login_required
+@check_confirmed
 def explore():
     page = request.args.get('page', 1, type=int)
     workouts = Workout.query.filter(Workout.user_id != current_user.id).order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
@@ -91,14 +92,14 @@ def user(username):
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User {} not found.'.format(username))
+        flash('Benutzer {} konnte nicht gefunden werden.'.format(username))
         return redirect(url_for('main.index'))
     if user == current_user:
-        flash('You cannot follow yourself!')
+        flash('Du kannst dir nicht selber folgen.')
         return redirect(url_for('main.user', username=username))
     current_user.follow(user)
     db.session.commit()
-    flash('You are following {}!'.format(username))
+    flash('Du folgst {}!'.format(username))
     return redirect(url_for('main.user', username=username))
 
 @bp.route('/unfollow/<username>')
@@ -107,18 +108,19 @@ def follow(username):
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User {} not found.'.format(username))
+        flash('Benutzer {} konnte nicht gefunden werden.'.format(username))
         return redirect(url_for('main.index'))
     if user == current_user:
-        flash('You cannot unfollow yourself!')
+        flash('Du kannst dir nicht selber entfolgen')
         return redirect(url_for('main.user', username=username))
     current_user.unfollow(user)
     db.session.commit()
-    flash('You are not following {}.'.format(username))
+    flash('Du folgst {} nicht.'.format(username))
     return redirect(url_for('main.user', username=username))
 
 @bp.route('/messages')
 @login_required
+@check_confirmed
 def messages():
     current_user.last_message_read_time = datetime.utcnow()
     current_user.add_notification('unread_message_count', 0)
@@ -133,6 +135,7 @@ def messages():
 
 @bp.route('/send_message/<recipient>', methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def send_message(recipient):
     user = User.query.filter_by(username=recipient).first_or_404()
     form = MessageForm()
@@ -141,12 +144,13 @@ def send_message(recipient):
         db.session.add(msg)
         user.add_notification('unread_message_count', user.new_messages())
         db.session.commit()
-        flash('Your message has been sent.')
+        flash('Deine Nachricht wurde gesendet.')
         return redirect(url_for('main.user', username=recipient))
-    return render_template('send_message.html', title='Send Message', form=form, recipient=recipient)
+    return render_template('send_message.html', title='Nachricht senden', form=form, recipient=recipient)
 
 @bp.route('/notifications')
 @login_required
+@check_confirmed
 def notifications():
     since = request.args.get('since', 0.0, type=float)
     notifications = current_user.notifications.filter(

@@ -1,6 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 {% block title %}
-    {% if title %}{{ title }} - Calisthenics Progression{% else %}Welcome to Calisthenics Progression{% endif %}
+    {% if title %}{{ title }} - Calisthenics Progression{% else %}Calisthenics Progression{% endif %}
 {% endblock %}
 <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
 
@@ -20,7 +20,7 @@
                 <ul class="nav navbar-nav">
                     {% if current_user.is_anonymous %}
                     {% else %}
-                    <li><a href="{{ url_for('main.workouts') }}">Workouts</a></li>
+                    <li><a href="{{ url_for('main.workouts') }}">Meine Workouts</a></li>
                     <li><a href="{{ url_for('main.explore') }}">Entdecken</a></li>
                     {% endif %}
                 </ul>
@@ -29,7 +29,7 @@
                     <li><a href="{{ url_for('auth.login') }}">Login</a></li>
                     {% else %}
                     <li>
-                        <a href="{{ url_for('main.messages') }}">{{ ('Messages') }}
+                        <a href="{{ url_for('main.messages') }}">{{ ('Nachrichten') }}
                             {% set new_messages = current_user.new_messages() %}
                             <span id="message_count" class="badge"
                                   style="visibility: {% if new_messages %}visible

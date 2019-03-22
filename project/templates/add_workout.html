@@ -7,7 +7,7 @@
                 <form method="POST" action="{{ url_for('main.add_workout') }}" id="workout">
                     <label>Workout</label>
                     <input type="text" class="form-control" name="wtitle" id="wtitle" placeholder="Workout Titel">
-                    <label>Exercise</label>
+                    <label>&Uuml;bung</label>
                     <select name="exercise1" class="form-control" form="workout">
                         {% for exercise in exercises %}
                         <option value="{{ exercise.id }}">{{ exercise.title }}</option>
@@ -15,15 +15,15 @@
                     </select>
                     <div class="form-group" id="exercise1">
                         <label>Progression</label>
-                        <input type="text" class="form-control" name="progression1" placeholder="progression">
+                        <input type="text" class="form-control" name="progression1" placeholder="Progression">
                         <label>Reps</label>
-                        <input type="text" class="form-control" name="reps1" placeholder="reps">       
+                        <input type="text" class="form-control" name="reps1" placeholder="Reps">       
                     </div>  
-                    <button type="button" class="btn btn-info addSet" exercise="1">Add Set</button>           
-                    <button type="button" id="addExercise" class="btn btn-success">Add Exercise</button>
+                    <button type="button" class="btn btn-info addSet" exercise="1">Set hinzuf&uuml;gen</button>           
+                    <button type="button" id="addExercise" class="btn btn-success">&Uuml;bung hinzuf&uuml;gen</button>
                     <input type="hidden" name="exercise_count" value="1">
                     <br><br>
-                    <button type="submit" class="btn btn-primary btn-block">Add Workout</button>
+                    <button type="submit" class="btn btn-primary btn-block">Workout hinzuf&uuml;gen</button>
                 </form>
                 <br>
             </div>
@@ -38,13 +38,13 @@
     <div class="form-group" id="exercise<%= exercise_num %>">
 
     </div>
-    <button type="button" class="btn btn-info addSet" exercise="<%= exercise_num %>">Add Set</button>
+    <button type="button" class="btn btn-info addSet" exercise="<%= exercise_num %>">Set hinzuf&uuml;gen</button>
 </script>
 
 <script type="text/html" id="set_template">
     <label>Progression</label>
-    <input type="text" class="form-control" name="progression<%= exercise_num %>" placeholder="progression">
+    <input type="text" class="form-control" name="progression<%= exercise_num %>" placeholder="Progression">
     <label>Reps</label>
-    <input type="text" class="form-control" name="reps<%= exercise_num %>" placeholder="reps">
+    <input type="text" class="form-control" name="reps<%= exercise_num %>" placeholder="Reps">
 </script>
 {% endblock %}

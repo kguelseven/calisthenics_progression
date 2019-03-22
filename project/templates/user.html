@@ -8,12 +8,13 @@
                 <h1>Athlet: {{ user.username }}</h1>
                 {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
                 {% if user.last_seen %}
-                    <p>Last seen on: {{ moment(user.last_seen).format('LLLL') }}</p>
+                    <p>Zuletzt gesehen am: {{ moment(user.last_seen).format('DD.MM.YYYY, HH:mm') }}</p>
                 {% endif %}
                 <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
                 {% if user == current_user %}
                 <p><a href="{{ url_for('auth.edit_profile') }}">Profil bearbeiten</a></p>
-                {% elif not current_user.is_following(user) %}
+                <p><a href="{{ url_for('auth.forgot') }}">Passwort zur&uuml;cksetzen</a></p>          
+                {% elif not current_user.is_following(user) %} 
                 <p><a href="{{ url_for('main.follow', username=user.username) }}">Follow</a></p>
                 {% else %}
                 <p><a href="{{ url_for('main.unfollow', username=user.username) }}">Unfollow</a></p>

@@ -66,7 +66,7 @@ def register():
         send_email(user.email, subject, html)
 
         login_user(user)
-        flash('Eine Bestätigungsmail wurde versendet.', 'success')
+        flash('Eine Bestätigungs-E-Mail wurde versendet.', 'success')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', title='Registrieren', form=form)
 
@@ -124,7 +124,7 @@ def forgot():
         subject = "Passwort zurücksetzen"
         send_email(user.email, subject, html)
 
-        flash('Eine Email zum zurücksetzen des Passwortes wurde versendet', 'success')
+        flash('Eine Email zum zurücksetzen des Passwortes wurde versendet.', 'success')
         return redirect(url_for("main.index"))
 
     return render_template('auth/forgot.html', form=form)
