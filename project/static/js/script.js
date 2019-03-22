@@ -22,7 +22,6 @@ $(document).ready(function() {
         exercise_num = Number($(this).attr("exercise"));
 
         set_compiled = set_template({exercise_num : exercise_num});
-        console.log(set_compiled);
         $("#exercise" + exercise_num).append(set_compiled);
     });
 
