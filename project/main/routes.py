@@ -142,7 +142,7 @@ def user(username):
         if workouts.has_next else None
     prev_url = url_for('main.user', username=user.username, page=workouts.prev_num) \
         if workouts.has_prev else None
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
     return render_template('user.html', user=user, image_file=image_file, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/follow/<username>')
