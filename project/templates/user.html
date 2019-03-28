@@ -3,7 +3,7 @@
 {% block content %}
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ image_file }}">
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
                     {% if user.about_me %}<hr><p>{{ user.about_me }}</p><hr>{% endif %}
