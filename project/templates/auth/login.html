@@ -1,17 +1,51 @@
 {% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
-
-{% block app_content %}
-    <h1>Einloggen</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Anmelden</legend>
+                <div class="form-group">
+                    {{ form.username.label(class="form-control-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-check">
+                    {{ form.remember_me(class="form-check-input") }}
+                    {{ form.remember_me.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
     </div>
-    <br>
-    <p>Neuer Benutzer? <a href="{{ url_for('auth.register') }}">Jetzt registrieren!</a></p>
-    <p>
-        Passwort vergessen?
-        <a href="{{ url_for('auth.forgot') }}">Hier zur&uuml;cksetzen</a>
-    </p>
-{% endblock %}
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a class="ml-2"  href="{{ url_for('auth.forgot') }}">Passwort vergessen?</a><br>
+            <a class="ml-2" href="{{ url_for('auth.register') }}">Neuer Benutzer?</a>
+        </small>
+    </div>
+{% endblock content %}

@@ -23,6 +23,7 @@ class User(UserMixin, db.Model):
     confirmed_on = db.Column(db.DateTime, nullable=True)
     password_reset_token = db.Column(db.String(255), nullable=True)
     about_me = db.Column(db.String(280))
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     registered_on = db.Column(db.DateTime, nullable=False)
     followed = db.relationship(
@@ -31,6 +32,7 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     workouts = db.relationship('Workout', backref='athlet', lazy='dynamic')
+    exercises = db.relationship('Exercises', backref='athlet', lazy='dynamic')
     messages_sent = db.relationship('Message', foreign_keys='Message.sender_id', backref='athlet', lazy='dynamic')
     messages_received = db.relationship('Message', foreign_keys='Message.recipient_id', backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
@@ -105,8 +107,12 @@ class Workout(db.Model):
 
 class Exercises(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80), index=True)
+    title = db.Column(db.String(80), index=True, unique=True)
+    description = db.Column(db.Text, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     exercise = db.relationship('Exercise', backref='exercise', lazy='dynamic')
+
 
     def __repr__(self):
         return '<Exercises {}>'.format(self.title)

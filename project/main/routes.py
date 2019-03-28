@@ -4,7 +4,7 @@ from datetime import datetime
 from project import db, app
 from project.models import User, Workout, Exercises, Exercise, Set, Message, Notification
 from project.main import bp
-from project.main.forms import MessageForm
+from project.main.forms import MessageForm, CreateExerciseForm
 from project.decorators import check_confirmed
 
 
@@ -32,16 +32,6 @@ def workouts():
     next_url = url_for('main.index', page=workouts.next_num) if workouts.has_next else None
     prev_url = url_for('main.index', page=workouts.prev_num) if workouts.has_prev else None
     return render_template('workouts.html', title='Home', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
-
-@bp.route('/explore')
-@login_required
-@check_confirmed
-def explore():
-    page = request.args.get('page', 1, type=int)
-    workouts = Workout.query.filter(Workout.user_id != current_user.id).order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
-    next_url = url_for('main.explore', page=workouts.next_num) if workouts.has_next else None
-    prev_url = url_for('main.explore', page=workouts.prev_num) if workouts.has_prev else None
-    return render_template('explore.html', title='Explore', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/add_workout', methods=['POST', 'GET'])
 @login_required
@@ -73,6 +63,74 @@ def add_workout():
     exercises = Exercises.query.all()
     return render_template('add_workout.html', exercises=exercises)
 
+@bp.route("/add_exercise", methods=['GET', 'POST'])
+@login_required
+def add_exercise():
+    form = CreateExerciseForm()
+    if form.validate_on_submit():
+        exercise = Exercises(title=form.title.data, description=form.description.data, athlet=current_user)
+        db.session.add(exercise)
+        db.session.commit()
+        flash('Deie Übung wurde erstellt!', 'success')
+        return redirect(url_for('main.all_exercises'))
+    return render_template('add_exercise.html', title='Neue Übung',
+                           form=form, legend='Neue Übung')
+
+@bp.route("/exercises/<int:exercises_id>")
+@login_required
+def exercise(exercises_id):
+    exercise = Exercises.query.get_or_404(exercises_id)
+    return render_template('exercise.html', title=exercise.title, exercise=exercise)
+
+@bp.route("/exercises", methods=['GET'])
+@login_required
+def all_exercises():
+    page = request.args.get('page', 1, type=int)
+    exercises = Exercises.query.order_by(Exercises.title.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=exercises.next_num) if exercises.has_next else None
+    prev_url = url_for('main.index', page=exercises.prev_num) if exercises.has_prev else None
+    return render_template('exercises.html', title='Alle Übungen', exercises=exercises.items, next_url=next_url, prev_url=prev_url)
+
+@bp.route("/exercise/<int:exercises_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_exercise(exercises_id):
+    exercise = Exercises.query.get_or_404(exercises_id)
+    if exercise.athlet != current_user:
+        abort(403)
+    form = CreateExerciseForm()
+    if form.validate_on_submit():
+        exercise.title = form.title.data
+        exercise.description = form.description.data
+        db.session.commit()
+        flash('Deine Übung wurde geändert', 'success')
+        return redirect(url_for('main.exercise', exercises_id=exercise.id))
+    elif request.method == 'GET':
+        form.title.data = exercise.title
+        form.description.data = exercise.description
+    return render_template('add_exercise.html', title='Ändere Übung',
+                           form=form, legend='Ändere Übung')
+
+@bp.route("/exercise/<int:exercises_id>/delete", methods=['POST'])
+@login_required
+def delete_exercise(exercises_id):
+    exercise = Exercises.query.get_or_404(exercises_id)
+    if exercise.athlet != current_user:
+        abort(403)
+    db.session.delete(exercise)
+    db.session.commit()
+    flash('Deine Übung wurde gelöscht!', 'success')
+    return render_template('exercises.html', title=exercise.title, exercise=exercise)
+
+@bp.route('/explore')
+@login_required
+@check_confirmed
+def explore():
+    page = request.args.get('page', 1, type=int)
+    workouts = Workout.query.filter(Workout.user_id != current_user.id).order_by(Workout.timestamp.desc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
+    next_url = url_for('main.explore', page=workouts.next_num) if workouts.has_next else None
+    prev_url = url_for('main.explore', page=workouts.prev_num) if workouts.has_prev else None
+    return render_template('explore.html', title='Explore', workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+
 @bp.route('/user/<username>')
 @login_required
 @check_confirmed
@@ -84,7 +142,8 @@ def user(username):
         if workouts.has_next else None
     prev_url = url_for('main.user', username=user.username, page=workouts.prev_num) \
         if workouts.has_prev else None
-    return render_template('user.html', user=user, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('user.html', user=user, image_file=image_file, workouts=workouts.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/follow/<username>')
 @login_required

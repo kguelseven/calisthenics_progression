@@ -16,7 +16,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 # view function for handling logins
 login.login_view = 'auth.login'
-login.login_message = ('Please log in to acess this page')
+login.login_message = ('Du musst angemeldet sein, um diese Seite zu sehen.')
 mail = Mail(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)

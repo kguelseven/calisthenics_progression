@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block app_content %}
+{% block content %}
     <h1>Workouts von anderen Athleten entdecken</h1>
     <hr>
     {% for workout in workouts %}
-        {% include '_workout.html' %}
-    {% endfor %}
-    <nav aria-label="...">
+    <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + workout.athlet.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('main.user', username=workout.athlet.username) }}">{{ workout.athlet.username }}</a>
+              <small class="text-muted">{{ workout.timestamp.strftime('%d.%m.%Y') }}</small>
+            </div>
+            <h2><a class="article-title" href="{{ url_for('main.workouts', workout_id=workout.id) }}">{{ workout.title }}</a></h2>
+            {% include '_workout.html' %}
+          </div>
+        </article>
+{% endfor %}
         <ul class="pager">
             <li class="previous{% if not prev_url %} disabled{% endif %}">
                 <a href="{{ prev_url or '#' }}">
@@ -20,5 +29,4 @@
                 </a>
             </li>
         </ul>
-    </nav>
 {% endblock %}

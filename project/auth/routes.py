@@ -1,15 +1,16 @@
+import secrets, os
 from datetime import datetime
+from PIL import Image
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from project import db
+from project import app, db
 from project.auth import bp
 from project.auth.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, EditProfileForm
 from project.auth.email import send_email
 from project.models import User
 from project.token import generate_confirmation_token, confirm_token
 from project.decorators import check_confirmed
-
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
@@ -34,6 +35,9 @@ def login():
 def edit_profile():
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
@@ -42,7 +46,21 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Profil bearbeiten', form=form)
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('edit_profile.html', title='Profil bearbeiten', image_file=image_file, form=form)
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
 
 @bp.route("/logout")
 def logout():
@@ -129,7 +147,6 @@ def forgot():
 
     return render_template('auth/forgot.html', form=form)
 
-
 @bp.route('/forgot/new/<token>', methods=['GET', 'POST'])
 def forgot_new(token):
 
@@ -160,5 +177,3 @@ def forgot_new(token):
         flash('Das Passwort konnte nicht zurückgesetzt werden. Bitte erneut versuchen.', 'danger')
 
     return redirect(url_for('main.index'))
-
-
