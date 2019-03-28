@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import SubmitField, TextAreaField, StringField, IntegerField
+from wtforms import SubmitField, TextAreaField, StringField
 from wtforms.validators import DataRequired, Length
 
 class MessageForm(Form):
