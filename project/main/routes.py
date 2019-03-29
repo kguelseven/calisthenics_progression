@@ -65,6 +65,7 @@ def add_workout():
 
 @bp.route("/add_exercise", methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def add_exercise():
     form = CreateExerciseForm()
     if form.validate_on_submit():
@@ -78,12 +79,14 @@ def add_exercise():
 
 @bp.route("/exercises/<int:exercises_id>")
 @login_required
+@check_confirmed
 def exercise(exercises_id):
     exercise = Exercises.query.get_or_404(exercises_id)
     return render_template('exercise.html', title=exercise.title, exercise=exercise)
 
 @bp.route("/exercises", methods=['GET'])
 @login_required
+@check_confirmed
 def all_exercises():
     page = request.args.get('page', 1, type=int)
     exercises = Exercises.query.order_by(Exercises.title.asc()).paginate(page, app.config['WORKOUTS_PER_PAGE'], False)
@@ -93,6 +96,7 @@ def all_exercises():
 
 @bp.route("/exercise/<int:exercises_id>/update", methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def update_exercise(exercises_id):
     exercise = Exercises.query.get_or_404(exercises_id)
     if exercise.athlet != current_user:
@@ -112,6 +116,7 @@ def update_exercise(exercises_id):
 
 @bp.route("/exercise/<int:exercises_id>/delete", methods=['POST'])
 @login_required
+@check_confirmed
 def delete_exercise(exercises_id):
     exercise = Exercises.query.get_or_404(exercises_id)
     if exercise.athlet != current_user:
