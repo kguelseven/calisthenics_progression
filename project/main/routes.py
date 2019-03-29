@@ -1,8 +1,7 @@
-from flask import render_template, flash, redirect, url_for, request, jsonify, abort, Response
+from flask import render_template, flash, redirect, url_for, request, jsonify, abort
 from flask_login import current_user, login_required
 from datetime import datetime
 from project import db, app
-from project.errors import handlers
 from project.models import User, Workout, Exercises, Exercise, Set, Message, Notification
 from project.main import bp
 from project.main.forms import MessageForm, CreateExerciseForm
