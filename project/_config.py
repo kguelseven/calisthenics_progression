@@ -19,7 +19,7 @@ FLASK_ENV = os.getenv('FLASK_ENV')
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # mail settings
-MAIL_SERVER = 'smtp.gmail.com'
+MAIL_SERVER = 'b1.tophost.ch'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
